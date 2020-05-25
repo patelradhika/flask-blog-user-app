@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block head %}
+Home | RadzBlog
+{% endblock head %}
+
+{% block body %}
+{% for blog in blogs %}
+<div class="container mt-5 p-5" style="background-color: bisque;">
+    <h3 class="pl-5 pt-2">{{blog.title}}</h3>
+    <p class="pl-5">
+        <em>Written By: </em><a href="">{{blog.author.username}}</a>
+        <br>
+        <em>Written On: </em>{{blog.written_on.strftime("%b %d, %Y %I:%M %p")}}
+    </p>
+    <p class="pl-5 pt-4 text-truncate">{{blog.content}}</p>
+</div>
+{% endfor %}
+{% endblock body %}
