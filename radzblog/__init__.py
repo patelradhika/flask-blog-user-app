@@ -4,6 +4,7 @@
 import os
 
 from flask import Flask
+from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
@@ -27,9 +28,19 @@ Migrate(app=app, db=db)
 
 
 """
----------------------------------------- Blueprints ------------------------------------------
+--------------------------------------- Login Manager ---------------------------------------
+"""
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "users.login"
+
+
+"""
+---------------------------------------- Blueprints -----------------------------------------
 """
 from radzblog.core.views import core
+from radzblog.users.views import users
 
 
 app.register_blueprint(core)
+app.register_blueprint(users)

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block head %}
+Register | RadzBlog
+{% endblock head %}
+
+{% block body %}
+<div class="container mt-5 p-5" style="background-color: bisque;">
+    <h3 class="px-5 py-2">Register Here!</h3>
+    <p class="px-5">Please fill the details below to create an account.</p>
+    
+    <form class="px-5 py-2" action="{{ url_for('users.register') }}" method="POST">
+        {{form.hidden_tag()}}
+        <div class="row px-5 py-2">
+            {{form.email.label(class="col-3 pt-2")}}
+            {{form.email(class="form-control col-7")}}
+        </div>
+
+        <div class="row px-5 py-2">
+            {{form.username.label(class="col-3 pt-2")}}
+            {{form.username(class="form-control col-7")}}
+        </div>
+
+        <div class="row px-5 py-2">
+            {{form.password.label(class="col-3 pt-2")}}
+            {{form.password(class="form-control col-7")}}
+        </div>
+
+        <div class="row px-5 py-2">
+            {{form.check_password.label(class="col-3 pt-2")}}
+            {{form.check_password(class="form-control col-7")}}
+        </div>
+
+        <div class="row px-5 pt-4">
+            <div class="col-3"></div>
+            {{form.submit(class="col-2 btn btn-primary")}}
+        </div>
+    </form>
+</div>
+{% endblock body %}

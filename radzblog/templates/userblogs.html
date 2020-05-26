@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{{user.username}} | RadzBlog
+{% endblock head %}
+
+{% block body %}
+<div class="row justify-content-center">
+    <div class="card text-center mt-5" style="background-color: bisque; width: fit-content;">
+        <img class="card-img-top img-thumbnail" src="{{ url_for('static', filename='pictures/' + user.profile_img) }}" alt="">
+        <div class="card-body">
+            <h5 class="card-text">{{user.username}}</h5>
+        </div>
+    </div>
+</div>
+
+{% for post in user.posts %}
+<div class="container mt-5 p-5" style="background-color: bisque;">
+    <h3 class="pl-5 pt-2">{{post.title}}</h3>
+    <p class="pl-5">
+        <em>Written On: </em>{{post.written_on.strftime("%b %d, %Y %I:%M %p")}}
+        <br>
+        <em>Posted On: </em>{{post.posted_on}}
+    </p>
+    <p class="pl-5 pt-4 text-truncate">{{post.content}}</p>
+</div>
+{% endfor %}
+{% endblock body %}

@@ -29,7 +29,36 @@
             <li class="nav-item">
                 <a class="nav-link text-white" href="{{ url_for('core.about') }}">About Us</a>
             </li>
+            {% if not current_user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{{ url_for('users.login') }}">Log In</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{{ url_for('users.register') }}">Register</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link text-white" href="">Create New Post</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{{ url_for('users.account') }}">Account</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{{ url_for('users.logout') }}">Log Out</a>
+            </li>
+            {% endif %}
         </ul>
+    </div>
+
+    <div class="container pt-4">
+        {% for message in get_flashed_messages(with_categories=true) %}
+        <div class="alert alert-{{message.0}}" role="alert">
+            {{message.1}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
     </div>
 
     {% block body %}

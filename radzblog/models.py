@@ -3,8 +3,16 @@
 """
 from datetime import datetime
 from flask_login import UserMixin
-from radzblog import db
+from radzblog import db, login_manager
 from werkzeug.security import generate_password_hash,check_password_hash
+
+
+"""
+----------------------------------------- Load User -----------------------------------------
+"""
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
 
 
 """
