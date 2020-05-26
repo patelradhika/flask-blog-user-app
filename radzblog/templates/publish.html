@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block head %}
+Publish Blog | RadzBlog
+{% endblock head %}
+
+{% block body %}
+{% for blog in posts %}
+<div class="container mt-5 p-5" style="background-color: bisque;">
+    <h3 class="pl-5 pt-2">{{blog.title}}</h3>
+    <p class="pl-5">
+        <em>Written On: </em>{{blog.written_on.strftime("%b %d, %Y %I:%M %p")}}
+    </p>
+    <p class="pl-5 pt-4">{{blog.content}}</p>
+
+    <div class="row pl-5 pt-2">
+        <form class="col-4 my-2" method="POST">
+            <div class="row">
+                <button class="col btn btn-success" type="submit" formaction="{{ url_for('blogs.post', id=blog.id) }}">Publish</button>
+                <button class="col ml-4 btn btn-primary" type="submit" formaction="{{ url_for('blogs.edit', id=blog.id) }}">Edit</button>
+            </div>
+        </form>
+    
+        <button class="col-2 my-2 ml-4 btn btn-danger" data-toggle="modal" data-target="#delete-modal-{{blog.id}}">Delete</button>
+        {% include 'delete-modal.html' %}
+    </div>
+</div>
+{% endfor %}
+{% endblock body %}

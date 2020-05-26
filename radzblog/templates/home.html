@@ -5,15 +5,46 @@ Home | RadzBlog
 {% endblock head %}
 
 {% block body %}
-{% for blog in blogs %}
-<div class="container mt-5 p-5" style="background-color: bisque;">
+<div class="container text-center">
+    {% if blogs.has_prev %}
+    <a class="btn btn-sm btn-outline-info text-white" href="{{ url_for('core.home', page=blogs.prev_num) }}">Previous</a>
+    {% else %}
+    <a class="btn btn-sm btn-outline-info text-white disabled" href="#">Previous</a>
+    {% endif %}
+
+    {% for page in blogs.iter_pages(left_edge=3, right_edge=3) %}
+    {% if page %}
+
+    {% if page==blogs.page %}
+    <a class="btn text-white" href="{{ url_for('core.home', page=page) }}">{{ page }}</a>
+    {% else %}
+    <a class="btn text-white" href="{{ url_for('core.home', page=page) }}">{{ page }}</a>
+    {% endif %}
+
+    {% else %}
+    <a href="#" class="btn text-white disabled">…</a>
+    {% endif %}
+    {% endfor %}
+
+    {% if blogs.has_next %}
+    <a class="btn btn-sm btn-outline-info text-white" href="{{ url_for('core.home', page=blogs.next_num) }}">Next</a>
+    {% else %}
+    <a class="btn btn-sm btn-outline-info text-white disabled" href="#">Next</a>
+    {% endif %}
+</div>
+
+{% for blog in blogs.items %}
+<div class="container mt-4 p-5" style="background-color: bisque;">
     <h3 class="pl-5 pt-2">{{blog.title}}</h3>
     <p class="pl-5">
-        <em>Written By: </em><a href="{{ url_for('users.userblogs', id=blog.author.id) }}">{{blog.author.username}}</a>
+        <em>Written By: </em><a
+            href="{{ url_for('users.userblogs', username=blog.author.username) }}">{{blog.author.username}}</a>
         <br>
-        <em>Written On: </em>{{blog.written_on.strftime("%b %d, %Y %I:%M %p")}}
+        <em>Posted On: </em>{{blog.posted_on.strftime("%b %d, %Y %I:%M %p")}}
     </p>
     <p class="pl-5 pt-4 text-truncate">{{blog.content}}</p>
+    <a class="float-right" href="{{ url_for('blogs.blogdetail', id=blog.id) }}">Read More...</a>
 </div>
 {% endfor %}
+
 {% endblock body %}

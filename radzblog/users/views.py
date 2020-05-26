@@ -137,7 +137,13 @@ def account():
     return render_template('account.html', form=form)
 
 
-@users.route('/userblogs/<int:id>')
-def userblogs(id):
-    user = User.query.get(id)
-    return render_template('userblogs.html', user=user)
+@users.route('/userblogs/<username>')
+def userblogs(username):
+    user = User.query.filter_by(username=username).first()
+    posts = []
+
+    for post in user.posts:
+        if post.posted:
+            posts.append(post)
+
+    return render_template('userblogs.html', user=user, posts=posts)

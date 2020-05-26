@@ -38,7 +38,10 @@
             </li>
             {% else %}
             <li class="nav-item">
-                <a class="nav-link text-white" href="">Create New Post</a>
+                <a class="nav-link text-white" href="{{ url_for('blogs.create') }}">Create Blog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{{ url_for('blogs.publish') }}">Publish Blog</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" href="{{ url_for('users.account') }}">Account</a>

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block head %}
+Blog | RadzBlog
+{% endblock head %}
+
+{% block body %}
+<div class="container mt-5 p-5" style="background-color: bisque;">
+    <h3 class="pl-5 pt-2">{{blog.title}}</h3>
+    <p class="pl-5">
+        <em>Written By: </em><a href="{{ url_for('users.userblogs', username=blog.author.username) }}">{{blog.author.username}}</a>
+        <br>
+        <em>Posted On: </em>{{blog.posted_on.strftime("%b %d, %Y %I:%M %p")}}
+    </p>
+    <p class="pl-5 pt-4">{{blog.content}}</p>
+    
+    {% if current_user.is_authenticated and current_user==blog.author %}
+        <div class="row">
+            <form class="col-2 ml-5 my-2" method="POST">
+                <button class="col btn btn-primary" type="submit" formaction="{{ url_for('blogs.edit', id=blog.id) }}">Edit</button>
+            </form>
+    
+            <button class="col-2 my-2 ml-4 btn btn-danger" data-toggle="modal" data-target="#delete-modal-{{blog.id}}">Delete</button>
+            {% include 'delete-modal.html' %}
+        </div>
+    {% endif %}
+</div>
+
+{% endblock body %}

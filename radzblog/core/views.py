@@ -1,7 +1,7 @@
 """
 ------------------------------------------ Imports ------------------------------------------
 """
-from flask import render_template, Blueprint
+from flask import render_template, Blueprint, request
 
 from radzblog.models import BlogPost
 
@@ -15,9 +15,10 @@ core = Blueprint('core', __name__)
 """
 ------------------------------------------- Views -------------------------------------------
 """
-@core.route('/')
-def home():
-    blogs = BlogPost.query.filter_by(posted=True).all()
+@core.route('/', defaults={"page": 1})
+@core.route('/<int:page>')
+def home(page):
+    blogs = BlogPost.query.filter_by(posted=True).order_by(BlogPost.posted_on.desc()).paginate(page=page, per_page=4, error_out=False)
     return render_template('home.html', blogs=blogs)
 
 
