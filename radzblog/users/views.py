@@ -113,7 +113,7 @@ def logout():
     return redirect(url_for('core.home'))
 
 
-@users.route('/account', methods=['GET', 'POST'])
+@users.route('/useraccount', methods=['GET', 'POST'])
 @login_required
 def account():
     form = UpdateForm()
@@ -169,7 +169,7 @@ def userblogs(username):
     return render_template('userblogs.html', user=user, posts=posts)
 
 
-@users.route('/delacct/<int:id>', methods=['POST'])
+@users.route('/userdeleteaccount/<int:id>', methods=['POST'])
 @login_required
 def delacct(id):
     user = User.query.get(id)

@@ -29,6 +29,7 @@ class User(db.Model, UserMixin):
     profile_img = db.Column(db.String(20), nullable=False, default='default_profile.png')
 
     posts = db.relationship('BlogPost', backref='author', lazy=True)
+    comments = db.relationship('Comment', backref='user', lazy=True)
 
     def __init__(self, email, username, password):
         self.email = email
@@ -43,6 +44,8 @@ class User(db.Model, UserMixin):
 
 class BlogPost(db.Model):
 
+    __tablename__ = 'posts'
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(140), nullable=False)
     content = db.Column(db.Text, nullable=False)
@@ -51,6 +54,7 @@ class BlogPost(db.Model):
     posted_on = db.Column(db.DateTime)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    comments = db.relationship('Comment', backref='post', lazy=True)
 
     def __init__(self, title, content, user_id):
         self.title = title
@@ -60,3 +64,21 @@ class BlogPost(db.Model):
 
     def __repr__(self):
         return f"Title: {self.title} -- Written On: {self.written_on} -- Posted: {self.posted}"
+
+
+class Comment(db.Model):
+
+    __tablename__ = 'comments'
+
+    id = db.Column(db.Integer, primary_key=True)
+    comment = db.Column(db.Text, nullable=False)
+    userid = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    postid = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
+
+    def __init__(self, comment, userid, postid):
+        self.comment = comment
+        self.userid = userid
+        self.postid = postid
+
+    def __repr__(self):
+        return f"Comment: {self.comment} -- By User: {self.userid} -- On Post: {self.postid}"

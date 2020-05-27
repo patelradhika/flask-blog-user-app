@@ -39,10 +39,12 @@ login_manager.login_view = "users.login"
 ---------------------------------------- Blueprints -----------------------------------------
 """
 from radzblog.blogs.views import blogs
+from radzblog.comments.views import comments
 from radzblog.core.views import core
 from radzblog.users.views import users
 
 
 app.register_blueprint(blogs)
+app.register_blueprint(comments)
 app.register_blueprint(core)
 app.register_blueprint(users)

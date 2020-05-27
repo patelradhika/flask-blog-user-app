@@ -8,22 +8,68 @@ Blog | RadzBlog
 <div class="container mt-5 p-5" style="background-color: bisque;">
     <h3 class="pl-5 pt-2">{{blog.title}}</h3>
     <p class="pl-5">
-        <em>Written By: </em><a href="{{ url_for('users.userblogs', username=blog.author.username) }}">{{blog.author.username}}</a>
+        <em>Written By: </em><a
+            href="{{ url_for('users.userblogs', username=blog.author.username) }}">{{blog.author.username}}</a>
         <br>
         <em>Posted On: </em>{{blog.posted_on.strftime("%b %d, %Y %I:%M %p")}}
     </p>
     <p class="pl-5 pt-4">{{blog.content}}</p>
-    
+
     {% if current_user.is_authenticated and current_user==blog.author %}
-        <div class="row">
-            <form class="col-2 ml-5 my-2" method="POST">
-                <button class="col btn btn-primary" type="submit" formaction="{{ url_for('blogs.edit', id=blog.id) }}">Edit</button>
-            </form>
-    
-            <button class="col-2 my-2 ml-4 btn btn-danger" data-toggle="modal" data-target="#delete-modal-{{blog.id}}">Delete</button>
-            {% include 'delete-modal.html' %}
-        </div>
+    <div class="row">
+        <form class="col-2 ml-5 my-2" method="POST">
+            <button class="col btn btn-primary" type="submit"
+                formaction="{{ url_for('blogs.edit', id=blog.id) }}">Edit</button>
+        </form>
+
+        <button class="col-2 my-2 ml-4 btn btn-danger" data-toggle="modal"
+            data-target="#delblog-modal-{{blog.id}}">Delete</button>
+        {% include 'delblog-modal.html' %}
+    </div>
     {% endif %}
 </div>
 
+{% if comments %}
+<div class="container p-5">
+    <h5 class="px-5 text-white">Comments Section:</h5>
+    {% for comment in comments %}
+    <div class="row px-5 mt-4">
+        <img class="rounded ml-3" src="{{ url_for('static', filename='pictures/' + comment.user.profile_img) }}" style="width: 30px; height: 30px;">
+        <p class="pl-2 text-white">{{comment.user.username}}</p>
+    </div>
+
+    <div class="row px-5">
+        <div class="col-10 px-5 ml-1">
+            <p class="text-white"><em>{{comment.comment}}</em></p>
+        </div>
+
+        {% if current_user.is_authenticated and current_user==comment.user %}
+        <div class="col px-5">
+            <a href="" style="color: white;" data-dismiss="modal" data-toggle="modal" data-target="#edtcom-modal-{{comment.id}}"><i class="fas fa-pen-alt"></i></a>
+            <a href="" style="color: white;" data-dismiss="modal" data-toggle="modal" data-target="#delcom-modal-{{comment.id}}"><i class="ml-4 fas fa-trash-alt"></i></a>
+        </div>
+
+        {% include 'edtcom-modal.html' %}
+        {% include 'delcom-modal.html' %}
+        {% endif %}            
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if current_user.is_authenticated %}
+<form class="container px-5 py-4" action="{{ url_for('comments.create', postid=blog.id) }}" method="POST"
+    style="background-color: bisque;">
+    {{form.hidden_tag()}}
+    <div class="row px-5">
+        {{form.comment.label(class="col-2 pt-3")}}
+        {{form.comment(class="form-control col-7", rows="3")}}
+    </div>
+
+    <div class="row px-5 pt-3">
+        <div class="col-2"></div>
+        {{form.submit(class="col-2 btn btn-success")}}
+    </div>
+</form>
+{% endif %}
 {% endblock body %}

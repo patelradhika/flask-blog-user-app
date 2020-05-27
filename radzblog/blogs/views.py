@@ -7,7 +7,8 @@ from flask_login import login_required, current_user
 
 from radzblog import db
 from radzblog.blogs.forms import CreateBlogForm
-from radzblog.models import BlogPost
+from radzblog.comments.forms import CommentForm
+from radzblog.models import BlogPost, Comment
 
 
 """
@@ -19,7 +20,7 @@ blogs = Blueprint('blogs', __name__)
 """
 ------------------------------------------- Views -------------------------------------------
 """
-@blogs.route('/createblog', methods=['GET', 'POST'])
+@blogs.route('/blogcreate', methods=['GET', 'POST'])
 @login_required
 def create():
     form = CreateBlogForm()
@@ -40,7 +41,7 @@ def create():
         return render_template('createblog.html', form=form)
 
 
-@blogs.route('/createblog/post', methods=['POST'])
+@blogs.route('/blogcreate/post', methods=['POST'])
 @login_required
 def newpost():
     form = CreateBlogForm()
@@ -65,7 +66,7 @@ def newpost():
     return redirect(url_for('core.home'))
 
 
-@blogs.route('/publish')
+@blogs.route('/blogpublish')
 @login_required
 def publish():
     posts = BlogPost.query.filter_by(posted=False,user_id=current_user.id).all()
@@ -74,10 +75,13 @@ def publish():
 @blogs.route('/blogdetail/<int:id>')
 def blogdetail(id):
     blog = BlogPost.query.get(id)
-    return render_template('blogdetail.html', blog=blog)
+    form = CommentForm()
+    comments = Comment.query.filter_by(postid=id).all()
+
+    return render_template('blogdetail.html', blog=blog, form=form, comments=comments)
 
 
-@blogs.route('/post/<int:id>', methods=['POST'])
+@blogs.route('/blogpost/<int:id>', methods=['POST'])
 @login_required
 def post(id):
     blog = BlogPost.query.get(id)
@@ -89,7 +93,7 @@ def post(id):
     return redirect(url_for('core.home'))
 
 
-@blogs.route('/edit/<int:id>', methods=['GET', 'POST'])
+@blogs.route('/blogedit/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit(id):
     blog = BlogPost.query.get(id)
@@ -101,7 +105,7 @@ def edit(id):
     return render_template('edit.html', form=form, blog=blog)
 
 
-@blogs.route('/update/<int:id>', methods=['POST'])
+@blogs.route('/blogupdate/<int:id>', methods=['POST'])
 @login_required
 def update(id):
     form = CreateBlogForm()
@@ -127,7 +131,7 @@ def update(id):
         return redirect(url_for('blogs.edit', id=id))
 
 
-@blogs.route('/edit_post/<int:id>', methods=['POST'])
+@blogs.route('/blogeditpost/<int:id>', methods=['POST'])
 @login_required
 def editpost(id):
     form = CreateBlogForm()
@@ -152,7 +156,7 @@ def editpost(id):
         return redirect(url_for('blogs.edit', id=id))
 
 
-@blogs.route('/delete/<int:id>', methods=['POST'])
+@blogs.route('/blogdelete/<int:id>', methods=['POST'])
 @login_required
 def delete(id):
     blog = BlogPost.query.get(id)
