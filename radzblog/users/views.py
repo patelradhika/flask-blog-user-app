@@ -184,14 +184,23 @@ def delacct(id):
 
     else:
         try:
-            db.session.delete(user)
-            db.session.commit()
-    
+            for comment in users.comments:
+                db.session.delete(comment)
+
         except Exception as e:
-            flash(u"Error encountered while deleting account: {}".format(e), "danger")
+            flash(u"Error encountered while deleting your comments: {}".format(e), "danger")
             return redirect(url_for('users.account'))
 
         else:
-            flash(u"Account and blogs deleted successfully!", "success")
+            try:
+                db.session.delete(user)
+                db.session.commit()
+        
+            except Exception as e:
+                flash(u"Error encountered while deleting account: {}".format(e), "danger")
+                return redirect(url_for('users.account'))
 
-            return redirect(url_for('core.home'))
+            else:
+                flash(u"Account deleted successfully!", "success")
+
+                return redirect(url_for('core.home'))

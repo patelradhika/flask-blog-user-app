@@ -24,12 +24,15 @@
 
     <div class="container pt-2">
         <ul class="nav nav-tabs nav-fill">
+            {% if current_user.username!="admin" %}
             <li class="nav-item">
                 <a class="nav-link text-white" href="{{ url_for('core.home') }}">Home</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" href="{{ url_for('core.about') }}">About Us</a>
             </li>
+            {% endif %}
+
             {% if not current_user.is_authenticated %}
             <li class="nav-item">
                 <a class="nav-link text-white" href="{{ url_for('users.login') }}">Log In</a>
@@ -37,12 +40,24 @@
             <li class="nav-item">
                 <a class="nav-link text-white" href="{{ url_for('users.register') }}">Register</a>
             </li>
-            {% else %}
+
+            {% elif current_user.is_authenticated and current_user.username!="admin" %}
             <li class="nav-item">
                 <a class="nav-link text-white" href="{{ url_for('blogs.create') }}">Create Blog</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" href="{{ url_for('blogs.publish') }}">Publish Blog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{{ url_for('users.account') }}">Account</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{{ url_for('users.logout') }}">Log Out</a>
+            </li>
+
+            {% elif current_user.is_authenticated and current_user.username=="admin" %}
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{{ url_for('comments.adminlist') }}">Approval List</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" href="{{ url_for('users.account') }}">Account</a>

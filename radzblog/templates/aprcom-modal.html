@@ -1,21 +1,22 @@
-<div class="modal" id="delacct-modal-{{current_user.id}}">
+<div class="modal" id="aprcom-modal-{{comment.id}}">
     <div class="modal-dialog mt-5 pt-5">
         <div class="modal-content mt-5">
             <div class="modal-header">
-                <h5 class="modal-title">Delete Account</h5>
+                <h5 class="modal-title">Approve</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
             <div class="modal-body">
-                <p>Are you sure you want to delete your account?</p>
+                <p>Are you sure you want to approve comment?</p>
+                <p>{{comment.comment}}</p>
             </div>
             
             <div class="modal-footer">
-                <form action="{{ url_for('users.delacct', id=current_user.id) }}" method="POST">
+                <form action="{{ url_for('comments.approve', id=comment.id) }}" method="POST">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-danger ml-2">Delete</button>
+                    <button type="submit" class="btn btn-success ml-2">Approve</button>
                 </form>
             </div>
         </div>

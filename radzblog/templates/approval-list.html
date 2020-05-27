@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block head %}
+Approval | RadzBlog
+{% endblock head %}
+
+{% block body %}
+{% if posts %}
+{% for post in posts %}
+<div class="container mt-5 p-5" style="background-color: bisque;">
+    <h3 class="pl-5 pt-2">{{post.title}}</h3>
+    <p class="pl-5">
+        <em>Posted On: </em>{{post.posted_on.strftime("%b %d, %Y %I:%M %p")}}
+    </p>
+    <p class="pl-5 pt-4 text-truncate">{{post.content}}</p>
+    <a class="float-right" href="{{ url_for('blogs.blogdetail', id=post.id) }}">Read More...</a>
+</div>
+{% endfor %}
+
+{% else %}
+<div class="container text-center text-white mt-5 p-2">
+    <p>No comments pending to be approved.</p>
+</div>
+{% endif %}
+{% endblock body %}

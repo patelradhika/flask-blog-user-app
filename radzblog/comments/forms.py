@@ -11,4 +11,4 @@ from wtforms.validators import DataRequired
 """
 class CommentForm(FlaskForm):
     comment = TextAreaField("Your thoughts (Comments)", validators=[DataRequired()])
-    submit = SubmitField("Publish")
+    submit = SubmitField("Send for Approval")

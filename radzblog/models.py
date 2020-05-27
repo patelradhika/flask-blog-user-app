@@ -72,6 +72,7 @@ class Comment(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     comment = db.Column(db.Text, nullable=False)
+    approved = db.Column(db.Boolean, nullable=False, default=False)
     userid = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     postid = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
 

@@ -28,6 +28,8 @@ def create(postid):
         db.session.add(comment)
         db.session.commit()
 
+        flash(u"Comment sent for Approval to admin. It will appear in comments once approved.", "success")
+
     else:
         for field in form.errors:
             if field != "csrf_token":
@@ -46,6 +48,7 @@ def delete(id):
     db.session.delete(comment)
     db.session.commit()
 
+    flash(u"Comment deleted.", "success")
     return redirect(url_for('blogs.blogdetail', id=postid))
 
 
@@ -57,4 +60,30 @@ def edit(id):
     comment.comment = request.form.get('edt-comment')
     db.session.commit()
 
+    flash(u"Comment edited.", "success")
+    return redirect(url_for('blogs.blogdetail', id=comment.postid))
+
+
+@comments.route('/admin/approval-list')
+@login_required
+def adminlist():
+    comments = Comment.query.filter_by(approved=False).all()
+    posts = []
+
+    for comment in comments:
+        posts.append(comment.post)
+        posts = list(set(posts))
+
+    return render_template('approval-list.html', posts=posts)
+
+
+@comments.route('/commentapprove/<int:id>', methods=['POST'])
+@login_required
+def approve(id):
+    comment = Comment.query.get(id)
+    
+    comment.approved = True
+    db.session.commit()
+
+    flash(u"Comment approved.", "success")
     return redirect(url_for('blogs.blogdetail', id=comment.postid))
