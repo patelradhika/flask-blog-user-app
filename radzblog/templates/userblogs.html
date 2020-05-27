@@ -21,6 +21,7 @@
         <em>Posted On: </em>{{post.posted_on.strftime("%b %d, %Y %I:%M %p")}}
     </p>
     <p class="pl-5 pt-4 text-truncate">{{post.content}}</p>
+    <a class="float-right" href="{{ url_for('blogs.blogdetail', id=post.id) }}">Read More...</a>
 </div>
 {% endfor %}
 {% endblock body %}
