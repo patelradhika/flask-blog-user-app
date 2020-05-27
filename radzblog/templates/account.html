@@ -12,26 +12,26 @@ Account | RadzBlog
         <p>{{current_user.email}}</p>
     </div>
 
-    <form class="px-5 py-5" action="{{ url_for('users.account') }}" method="POST" enctype="multipart/form-data">
+    <form class="px-5" action="{{ url_for('users.account') }}" method="POST" enctype="multipart/form-data">
         {{form.hidden_tag()}}
         <div class="row px-5 py-2">
             {{form.email.label(class="col-3 pt-2")}}
-            {{form.email(class="form-control col-7")}}
+            {{form.email(class="form-control col-7", placeholder="New Email ID")}}
         </div>
 
         <div class="row px-5 py-2">
             {{form.username.label(class="col-3 pt-2")}}
-            {{form.username(class="form-control col-7")}}
+            {{form.username(class="form-control col-7", placeholder="New Username")}}
         </div>
 
         <div class="row px-5 py-2">
             {{form.password.label(class="col-3 pt-2")}}
-            {{form.password(class="form-control col-7")}}
+            {{form.password(class="form-control col-7", placeholder="New Password")}}
         </div>
 
         <div class="row px-5 py-2">
             {{form.check_password.label(class="col-3 pt-2")}}
-            {{form.check_password(class="form-control col-7")}}
+            {{form.check_password(class="form-control col-7", placeholder="Re-enter New Password")}}
         </div>
 
         <hr>
@@ -46,5 +46,12 @@ Account | RadzBlog
             {{form.submit(class="col-2 btn btn-primary")}}
         </div>
     </form>
+
+    <hr>
+    <div class="row px-5 pt-2">
+        <label class="col-3 px-5 ml-3 mt-2" for="delete">Delete Account</label>
+        <button id="delete" type="button" class="ml-2 btn btn-danger" data-toggle="modal" data-target="#delacct-modal-{{current_user.id}}">Delete</button>
+    </div>
+    {% include 'delacct-modal.html' %}
 </div>
 {% endblock body %}

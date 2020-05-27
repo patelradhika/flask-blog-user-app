@@ -147,3 +147,31 @@ def userblogs(username):
             posts.append(post)
 
     return render_template('userblogs.html', user=user, posts=posts)
+
+
+@users.route('/delacct/<int:id>', methods=['POST'])
+@login_required
+def delacct(id):
+    user = User.query.get(id)
+
+    try:
+        for post in user.posts:
+            db.session.delete(post)
+
+    except Exception as e:
+        flash(u"Error encountered while deleting your blogs: {}".format(e), "danger")
+        return redirect(url_for('users.account'))
+
+    else:
+        try:
+            db.session.delete(user)
+            db.session.commit()
+    
+        except Exception as e:
+            flash(u"Error encountered while deleting account: {}".format(e), "danger")
+            return redirect(url_for('users.account'))
+
+        else:
+            flash(u"Account and blogs deleted successfully!", "success")
+
+            return redirect(url_for('core.home'))
