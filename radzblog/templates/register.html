@@ -36,5 +36,14 @@ Register | RadzBlog
             {{form.submit(class="col-2 btn btn-primary")}}
         </div>
     </form>
+
+    <div class="container px-5 pt-4">
+        <h6 class="px-5">Password Criteria:</h6>
+        <ol class="px-5 ml-3">
+            <li>Minimum 8 characters</li>
+            <li>At least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character</li>
+            <li>Allowed special characters: ['_', '@', '$', '#']</li>
+        </ol>
+    </div>
 </div>
 {% endblock body %}

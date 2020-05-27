@@ -5,6 +5,7 @@ Publish Blog | RadzBlog
 {% endblock head %}
 
 {% block body %}
+{% if posts %}
 {% for blog in posts %}
 <div class="container mt-5 p-5" style="background-color: bisque;">
     <h3 class="pl-5 pt-2">{{blog.title}}</h3>
@@ -26,4 +27,9 @@ Publish Blog | RadzBlog
     </div>
 </div>
 {% endfor %}
+{% else %}
+<div class="container text-center mt-5 p-2" style="background-color: bisque;">
+    <p>No blogs to publish yet. <a href="{{ url_for('blogs.create') }}">Create new blogs</a> to publish.</p>
+</div>
+{% endif %}
 {% endblock body %}

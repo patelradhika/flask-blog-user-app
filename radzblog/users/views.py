@@ -12,6 +12,12 @@ from radzblog.users.pic_handler import add_profile_pic
 
 
 """
+------------------------------------- Constant Variable -------------------------------------
+"""
+ALLOWED_SPECIAL_CHAR = ['_', '@', '$', '#']
+
+
+"""
 ----------------------------------------- Blueprint -----------------------------------------
 """
 users = Blueprint('users', __name__)
@@ -35,6 +41,15 @@ def register():
 
         elif User.query.filter_by(username=username).first():
             flash(u"Username not available! Please select different username.", "danger")
+            return render_template('register.html', form=form)
+
+        elif len(password) < 8                                                              \
+            or not any(char.isdigit() for char in password)                                 \
+            or not any(char.isupper() for char in password)                                 \
+            or not any(char.islower() for char in password)                                 \
+            or not any(not char.isalnum() for char in password)                             \
+            or not any(char in ALLOWED_SPECIAL_CHAR for char in password):
+            flash(u"Password does not match criteria.", "danger")
             return render_template('register.html', form=form)
 
         else:
@@ -62,7 +77,12 @@ def login():
 
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        if not user.check_password(form.password.data):
+
+        if not user:
+            flash(u"Username not registered with us! Please re-check the username.", "danger")
+            return render_template('login.html', form=form)
+
+        elif not user.check_password(form.password.data):
             flash(u"Incorrect password entered! Please enter correct password.", "danger")
             return render_template('login.html', form=form)
 
