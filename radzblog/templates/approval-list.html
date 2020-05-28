@@ -7,18 +7,19 @@ Approval | RadzBlog
 {% block body %}
 {% if posts %}
 {% for post in posts %}
-<div class="container mt-5 p-5" style="background-color: bisque;">
-    <h3 class="pl-5 pt-2">{{post.title}}</h3>
-    <p class="pl-5">
-        <em>Posted On: </em>{{post.posted_on.strftime("%b %d, %Y %I:%M %p")}}
-    </p>
-    <p class="pl-5 pt-4 text-truncate">{{post.content}}</p>
-    <a class="float-right" href="{{ url_for('blogs.blogdetail', id=post.id) }}">Read More...</a>
+<div class="container py-4" style="background-color: bisque; max-width: 50rem;">
+    <h3 class="pl-3">{{post.title}}</h3>
+    <em class="pl-3">Posted On: </em>{{post.posted_on.strftime("%b %d, %Y %I:%M %p")}}
+    
+    <div class="px-3 mt-3">
+        {{post.content}}
+        <a class="float-right" href="{{ url_for('blogs.blogdetail', id=post.id) }}">Read More...</a>
+    </div>
 </div>
 {% endfor %}
 
 {% else %}
-<div class="container text-center text-white mt-5 p-2">
+<div class="container text-center text-white p-2">
     <p>No comments pending to be approved.</p>
 </div>
 {% endif %}

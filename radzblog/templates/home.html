@@ -5,9 +5,10 @@ Home | RadzBlog
 {% endblock head %}
 
 {% block body %}
-<div class="container text-center">
+<div class="container mt-4 text-center">
     {% if blogs.has_prev %}
-    <a class="btn btn-sm btn-outline-info text-white" href="{{ url_for('core.home', page=blogs.prev_num) }}">Previous</a>
+    <a class="btn btn-sm btn-outline-info text-white"
+        href="{{ url_for('core.home', page=blogs.prev_num) }}">Previous</a>
     {% else %}
     <a class="btn btn-sm btn-outline-info text-white disabled" href="#">Previous</a>
     {% endif %}
@@ -34,17 +35,17 @@ Home | RadzBlog
 </div>
 
 {% for blog in blogs.items %}
-<div class="container mt-4 p-5" style="background-color: bisque;">
-    <h3 class="pl-5 pt-2">{{blog.title}}</h3>
-    <p class="pl-5">
-        <em>Written By: </em><a
+<div class="container mt-5 py-4" style="background-color: bisque; max-width: 50rem;">
+    <h3 class="pl-3">{{blog.title}}</h3>
+    <em class="pl-3">Written By: </em><a
             href="{{ url_for('users.userblogs', username=blog.author.username) }}">{{blog.author.username}}</a>
-        <br>
-        <em>Posted On: </em>{{blog.posted_on.strftime("%b %d, %Y %I:%M %p")}}
-    </p>
-    <p class="pl-5 pt-4 text-truncate">{{blog.content}}</p>
-    <a class="float-right" href="{{ url_for('blogs.blogdetail', id=blog.id) }}">Read More...</a>
+    <br>
+    <em class="pl-3">Posted On: </em>{{blog.posted_on.strftime("%b %d, %Y %I:%M %p")}}
+    
+    <div class="px-3 mt-3">
+        {{blog.content}}
+        <a class="float-right" href="{{ url_for('blogs.blogdetail', id=blog.id) }}">Read More...</a>
+    </div>
 </div>
 {% endfor %}
-
 {% endblock body %}

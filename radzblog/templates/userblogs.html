@@ -6,7 +6,7 @@
 
 {% block body %}
 <div class="row justify-content-center">
-    <div class="card text-center mt-5" style="background-color: bisque; width: fit-content;">
+    <div class="card text-center" style="background-color: bisque; width: fit-content;">
         <img class="card-img-top img-thumbnail" src="{{ url_for('static', filename='pictures/' + user.profile_img) }}" alt="">
         <div class="card-body">
             <h5 class="card-text">{{user.username}}</h5>
@@ -15,13 +15,14 @@
 </div>
 
 {% for post in posts %}
-<div class="container mt-5 p-5" style="background-color: bisque;">
-    <h3 class="pl-5 pt-2">{{post.title}}</h3>
-    <p class="pl-5">
-        <em>Posted On: </em>{{post.posted_on.strftime("%b %d, %Y %I:%M %p")}}
-    </p>
-    <p class="pl-5 pt-4 text-truncate">{{post.content}}</p>
-    <a class="float-right" href="{{ url_for('blogs.blogdetail', id=post.id) }}">Read More...</a>
+<div class="container mt-4 py-4" style="background-color: bisque; max-width: 50rem;">
+    <h3 class="pl-3">{{post.title}}</h3>
+    <em class="pl-3">Posted On: </em>{{post.posted_on.strftime("%b %d, %Y %I:%M %p")}}
+    
+    <div class="px-3 mt-4">
+        {{post.content}}
+        <a class="float-right" href="{{ url_for('blogs.blogdetail', id=post.id) }}">Read More...</a>
+    </div>
 </div>
 {% endfor %}
 {% endblock body %}

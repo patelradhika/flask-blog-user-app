@@ -8,21 +8,25 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
-    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+        integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
+
     <title>
         {% block head %}
         {% endblock head %}
     </title>
 </head>
 
-<body
-    style="background-image: url('https://venngage-wordpress.s3.amazonaws.com/uploads/2018/09/Natural-Wood-Panels-Simple-Background-Image.jpeg');">
+<body style="background-image: url('https://venngage-wordpress.s3.amazonaws.com/uploads/2018/09/Natural-Wood-Panels-Simple-Background-Image.jpeg');">
     <nav class="navbar justify-content-center">
         <a class="navbar-brand text-white" href="{{ url_for('core.home') }}">RadzBlog</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
     </nav>
 
-    <div class="container pt-2">
+    <div class="container pt-2 navbar-collapse" id="navbarSupportedContent">
         <ul class="nav nav-tabs nav-fill">
             {% if current_user.username!="admin" %}
             <li class="nav-item">
@@ -69,6 +73,7 @@
         </ul>
     </div>
 
+    {% if get_flashed_messages() %}
     <div class="container pt-4">
         {% for message in get_flashed_messages(with_categories=true) %}
         <div class="alert alert-{{message.0}}" role="alert">
@@ -79,11 +84,12 @@
         </div>
         {% endfor %}
     </div>
+    {% endif %}
 
-    {% block body %}
-    {% endblock body %}
-
-    <div class="container p-5"></div>
+    <div class="container my-5" style="max-width: 50rem;">
+        {% block body %}
+        {% endblock body %}
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

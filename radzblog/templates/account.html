@@ -5,52 +5,52 @@ Account | RadzBlog
 {% endblock head %}
 
 {% block body %}
-<div class="container mt-5 p-5" style="background-color: bisque;">
-    <div class="container p-5 text-center">
+<div class="container py-4" style="background-color: bisque;">
+    <div class="container mb-5 text-center">
         <h5>Welcome {{current_user.username}}</h5>
         <img class="img-thumbnail" src="{{ url_for('static', filename='pictures/' + current_user.profile_img) }}" alt="">
         <p>{{current_user.email}}</p>
     </div>
 
-    <form class="px-5" action="{{ url_for('users.account') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ url_for('users.account') }}" method="POST" enctype="multipart/form-data">
         {{form.hidden_tag()}}
-        <div class="row px-5 py-2">
+        <div class="row pl-5 py-2">
             {{form.email.label(class="col-3 pt-2")}}
             {{form.email(class="form-control col-7", placeholder="Update Email ID")}}
         </div>
 
-        <div class="row px-5 py-2">
+        <div class="row pl-5 py-2">
             {{form.username.label(class="col-3 pt-2")}}
             {{form.username(class="form-control col-7", placeholder="Update Username")}}
         </div>
 
-        <div class="row px-5 py-2">
+        <div class="row pl-5 py-2">
             {{form.password.label(class="col-3 pt-2")}}
             {{form.password(class="form-control col-7", placeholder="Update Password")}}
         </div>
 
-        <div class="row px-5 py-2">
+        <div class="row pl-5 py-2">
             {{form.check_password.label(class="col-3 pt-2")}}
             {{form.check_password(class="form-control col-7", placeholder="Re-enter Update Password")}}
         </div>
 
         <hr>
 
-        <div class="row px-5 py-2">
+        <div class="row px-5">
             {{form.picture.label(class="col-3 pt-2")}}
             {{form.picture(class="form-control-file col-7 pt-1")}}
         </div>
 
-        <div class="row px-5 pt-4">
+        <div class="row pl-5">
             <div class="col-3"></div>
             {{form.submit(class="col-2 btn btn-primary")}}
         </div>
     </form>
 
     <hr>
-    <div class="row px-5 pt-2">
-        <label class="col-3 px-5 ml-3 mt-2" for="delete">Delete Account</label>
-        <button id="delete" type="button" class="ml-2 btn btn-danger" data-toggle="modal" data-target="#delacct-modal-{{current_user.id}}">Delete</button>
+    <div class="row">
+        <label class="col-3 pl-5 ml-3 mt-2" for="delete">Delete Account</label>
+        <button id="delete" type="button" class="ml-4 btn btn-danger" data-toggle="modal" data-target="#delacct-modal-{{current_user.id}}">Delete</button>
     </div>
     {% include 'delacct-modal.html' %}
 </div>

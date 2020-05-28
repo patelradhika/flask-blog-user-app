@@ -58,15 +58,13 @@ def register():
             db.session.commit()
             flash(u"Registered successfully! Please login to your account.", "success")
 
-        return redirect(url_for('users.login'))
+            return redirect(url_for('users.login'))
 
     else:
         for field in form.errors:
             if field != "csrf_token":
                 for error in form.errors[field]:
                     flash(error, "danger")
-
-        return render_template('register.html', form=form)
 
     return render_template('register.html', form=form)
 
@@ -90,10 +88,14 @@ def login():
             login_user(user)
             flash(u"Logged in successfully!", "success")
 
-            next = request.args.get('next')
-            if next == None or not next[0]=='/':
-                next = url_for('core.home')
-
+            next = request.form.get("next")
+            
+            if not next:
+                if current_user.username == "admin":
+                    next = url_for('comments.adminlist')
+                else:
+                    next = url_for('core.home')
+                    
             return redirect(next)
 
     else:
@@ -102,7 +104,7 @@ def login():
                 for error in form.errors[field]:
                     flash(error, "danger")
 
-    return render_template('login.html', form=form)
+        return render_template('login.html', form=form)
 
 
 @users.route('/logout')
@@ -173,34 +175,17 @@ def userblogs(username):
 @login_required
 def delacct(id):
     user = User.query.get(id)
+    logout_user()
 
     try:
-        for post in user.posts:
-            db.session.delete(post)
+        db.session.delete(user)
+        db.session.commit()
 
     except Exception as e:
-        flash(u"Error encountered while deleting your blogs: {}".format(e), "danger")
+        flash(u"Error encountered while deleting account: {}".format(e), "danger")
         return redirect(url_for('users.account'))
 
     else:
-        try:
-            for comment in users.comments:
-                db.session.delete(comment)
+        flash(u"Account deleted successfully!", "success")
 
-        except Exception as e:
-            flash(u"Error encountered while deleting your comments: {}".format(e), "danger")
-            return redirect(url_for('users.account'))
-
-        else:
-            try:
-                db.session.delete(user)
-                db.session.commit()
-        
-            except Exception as e:
-                flash(u"Error encountered while deleting account: {}".format(e), "danger")
-                return redirect(url_for('users.account'))
-
-            else:
-                flash(u"Account deleted successfully!", "success")
-
-                return redirect(url_for('core.home'))
+        return redirect(url_for('core.home'))

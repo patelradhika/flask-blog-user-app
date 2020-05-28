@@ -5,41 +5,41 @@ Register | RadzBlog
 {% endblock head %}
 
 {% block body %}
-<div class="container mt-5 p-5" style="background-color: bisque;">
-    <h3 class="px-5 py-2">Register Here!</h3>
+<div class="container py-4" style="background-color: bisque;">
+    <h3 class="px-5 mt-2">Register Here!</h3>
     <p class="px-5">Please fill the details below to create an account.</p>
     
     <form class="px-5 py-2" action="{{ url_for('users.register') }}" method="POST">
         {{form.hidden_tag()}}
         <div class="row px-5 py-2">
-            {{form.email.label(class="col-3 pt-2")}}
+            {{form.email.label(class="col-4 mt-2")}}
             {{form.email(class="form-control col-7")}}
         </div>
 
         <div class="row px-5 py-2">
-            {{form.username.label(class="col-3 pt-2")}}
+            {{form.username.label(class="col-4 mt-2")}}
             {{form.username(class="form-control col-7")}}
         </div>
 
         <div class="row px-5 py-2">
-            {{form.password.label(class="col-3 pt-2")}}
+            {{form.password.label(class="col-4 mt-2")}}
             {{form.password(class="form-control col-7")}}
         </div>
 
         <div class="row px-5 py-2">
-            {{form.check_password.label(class="col-3 pt-2")}}
+            {{form.check_password.label(class="col-4 mt-2")}}
             {{form.check_password(class="form-control col-7")}}
         </div>
 
-        <div class="row px-5 pt-4">
-            <div class="col-3"></div>
+        <div class="row px-5 mt-4">
+            <div class="col-4"></div>
             {{form.submit(class="col-2 btn btn-primary")}}
         </div>
     </form>
 
-    <div class="container px-5 pt-4">
+    <div class="container px-5 mt-4">
         <h6 class="px-5">Password Criteria:</h6>
-        <ol class="px-5 ml-3">
+        <ol class="pl-5 ml-3">
             <li>Minimum 8 characters</li>
             <li>At least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character</li>
             <li>Allowed special characters: ['_', '@', '$', '#']</li>

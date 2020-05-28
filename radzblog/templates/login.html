@@ -5,23 +5,24 @@ Log In | RadzBlog
 {% endblock head %}
 
 {% block body %}
-<div class="container mt-5 p-5" style="background-color: bisque;">
-    <h3 class="pl-5 pt-2">Login to your Account!</h3>
+<div class="container py-4" style="background-color: bisque; max-width: 50 rem">
+    <h3 class="px-5 pt-2">Login to your Account!</h3>
 
-    <form class="px-5 py-5" action="{{ url_for('users.login') }}" method="POST">
+    <form class="px-5 pt-4" action="{{ url_for('users.login') }}" method="POST">
         {{form.hidden_tag()}}
+        <input type="hidden" name="next" value="{{ request.args.get('next', '') }}" />
         <div class="row px-5 py-2">
-            {{form.username.label(class="col-2 pt-2")}}
+            {{form.username.label(class="col-3 mt-1")}}
             {{form.username(class="form-control col-7")}}
         </div>
 
         <div class="row px-5 py-2">
-            {{form.password.label(class="col-2 pt-2")}}
+            {{form.password.label(class="col-3 mt-1")}}
             {{form.password(class="form-control col-7")}}
         </div>
 
         <div class="row px-5 pt-4">
-            <div class="col-2"></div>
+            <div class="col-3"></div>
             {{form.submit(class="col-2 btn btn-primary")}}
         </div>
     </form>

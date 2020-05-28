@@ -85,5 +85,10 @@ def approve(id):
     comment.approved = True
     db.session.commit()
 
+    comments_left = Comment.query.filter_by(postid=comment.postid, approved=False).all()
     flash(u"Comment approved.", "success")
-    return redirect(url_for('blogs.blogdetail', id=comment.postid))
+
+    if comments_left:
+        return redirect(url_for('blogs.blogdetail', id=comment.postid))
+    else:
+        return redirect(url_for('comments.adminlist'))
