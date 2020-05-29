@@ -2,7 +2,7 @@
 ------------------------------------------ Imports ------------------------------------------
 """
 from datetime import datetime
-from flask import Blueprint, render_template, url_for, redirect, flash, request
+from flask import Blueprint, render_template, url_for, redirect, flash, request, abort
 from flask_login import login_required, current_user
 
 from radzblog import db
@@ -41,7 +41,7 @@ def create():
         return render_template('createblog.html', form=form)
 
 
-@blogs.route('/blogcreate/post', methods=['POST'])
+@blogs.route('/blogcreate/post', methods=['GET', 'POST'])
 @login_required
 def newpost():
     form = CreateBlogForm()
@@ -74,44 +74,58 @@ def publish():
 
 @blogs.route('/blogdetail/<int:id>')
 def blogdetail(id):
-    blog = BlogPost.query.get(id)
-    form = CommentForm()
-    comments = Comment.query.filter_by(postid=id).all()
+    blog = BlogPost.query.get_or_404(id)
 
-    return render_template('blogdetail.html', blog=blog, form=form, comments=comments)
+    if blog.posted:
+        form = CommentForm()
+        comments = Comment.query.filter_by(postid=id).all()
+
+        return render_template('blogdetail.html', blog=blog, form=form, comments=comments)
+
+    else:
+        abort(404)
 
 
-@blogs.route('/blogpost/<int:id>', methods=['POST'])
+@blogs.route('/blogpost/<int:id>', methods=['GET', 'POST'])
 @login_required
 def post(id):
-    blog = BlogPost.query.get(id)
-    blog.posted = True
-    blog.posted_on = datetime.now()
+    blog = BlogPost.query.get_or_404(id)
 
-    db.session.commit()
+    if blog.author == current_user:
+        blog.posted = True
+        blog.posted_on = datetime.now()
 
-    return redirect(url_for('core.home'))
+        db.session.commit()
+        return redirect(url_for('core.home'))
+
+    else:
+        abort(403)
 
 
 @blogs.route('/blogedit/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit(id):
-    blog = BlogPost.query.get(id)
-    form = CreateBlogForm()
+    blog = BlogPost.query.get_or_404(id)
 
-    form.title.data = blog.title
-    form.content.data = blog.content
+    if blog.author == current_user:
+        form = CreateBlogForm()
 
-    return render_template('edit.html', form=form, blog=blog)
+        form.title.data = blog.title
+        form.content.data = blog.content
+
+        return render_template('edit.html', form=form, blog=blog)
+
+    else:
+        abort(403)
 
 
-@blogs.route('/blogupdate/<int:id>', methods=['POST'])
+@blogs.route('/blogupdate/<int:id>', methods=['GET', 'POST'])
 @login_required
 def update(id):
     form = CreateBlogForm()
 
     if form.validate_on_submit():
-        blog = BlogPost.query.get(id)
+        blog = BlogPost.query.get_pr_404(id)
         
         blog.title = form.title.data
         blog.content = form.content.data
@@ -131,13 +145,13 @@ def update(id):
         return redirect(url_for('blogs.edit', id=id))
 
 
-@blogs.route('/blogeditpost/<int:id>', methods=['POST'])
+@blogs.route('/blogeditpost/<int:id>', methods=['GET', 'POST'])
 @login_required
 def editpost(id):
     form = CreateBlogForm()
 
     if form.validate_on_submit():
-        blog = BlogPost.query.get(id)
+        blog = BlogPost.query.get_or_404(id)
         
         blog.title = form.title.data
         blog.content = form.content.data
@@ -156,14 +170,18 @@ def editpost(id):
         return redirect(url_for('blogs.edit', id=id))
 
 
-@blogs.route('/blogdelete/<int:id>', methods=['POST'])
+@blogs.route('/blogdelete/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete(id):
-    blog = BlogPost.query.get(id)
+    blog = BlogPost.query.get_or_404(id)
 
-    db.session.delete(blog)
-    db.session.commit()
+    if blog.author == current_user:
+        db.session.delete(blog)
+        db.session.commit()
 
-    flash(u"Successfully deleted blog post!", "success")
+        flash(u"Successfully deleted blog post!", "success")
 
-    return redirect(url_for('core.home'))
+        return redirect(url_for('core.home'))
+
+    else:
+        abort(403)

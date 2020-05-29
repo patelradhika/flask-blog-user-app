@@ -1,7 +1,7 @@
 """
 ------------------------------------------ Imports ------------------------------------------
 """
-from flask import render_template, Blueprint, request, redirect, url_for, flash
+from flask import render_template, Blueprint, request, redirect, url_for, flash, abort
 from flask_login import login_user, current_user, logout_user, login_required
 from werkzeug.security import generate_password_hash
 
@@ -156,7 +156,7 @@ def account():
                 for error in form.errors[field]:
                     flash(error, "danger")
 
-    return render_template('account.html', form=form)
+        return render_template('account.html', form=form)
 
 
 @users.route('/userblogs/<username>')
@@ -171,21 +171,26 @@ def userblogs(username):
     return render_template('userblogs.html', user=user, posts=posts)
 
 
-@users.route('/userdeleteaccount/<int:id>', methods=['POST'])
+@users.route('/userdeleteaccount/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delacct(id):
-    user = User.query.get(id)
-    logout_user()
+    user = User.query.get_or_404(id)
 
-    try:
-        db.session.delete(user)
-        db.session.commit()
+    if user == current_user:
+        logout_user()
 
-    except Exception as e:
-        flash(u"Error encountered while deleting account: {}".format(e), "danger")
-        return redirect(url_for('users.account'))
+        try:
+            db.session.delete(user)
+            db.session.commit()
+
+        except Exception as e:
+            flash(u"Error encountered while deleting account: {}".format(e), "danger")
+            return redirect(url_for('users.account'))
+
+        else:
+            flash(u"Account deleted successfully!", "success")
+
+            return redirect(url_for('core.home'))
 
     else:
-        flash(u"Account deleted successfully!", "success")
-
-        return redirect(url_for('core.home'))
+        abort(403)
