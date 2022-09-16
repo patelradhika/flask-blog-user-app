@@ -23,7 +23,7 @@ idna==2.9
 itsdangerous==1.1.0
 Jinja2==2.11.2
 lazy==1.4
-Mako==1.1.2
+Mako==1.2.2
 MarkupSafe==1.1.1
 oauth2==1.9.0.post1
 oauthlib==3.1.0
